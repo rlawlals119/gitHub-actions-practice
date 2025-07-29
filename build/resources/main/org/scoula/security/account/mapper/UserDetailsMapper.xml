@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.scoula.security.account.mapper.UserDetailsMapper">
+
+    <!-- 권한 정보 매핑 -->
+    <resultMap id="authMap" type="AuthDTO">
+        <result property="auth" column="auth"/>
+    </resultMap>
+
+    <!-- 회원 정보 매핑 -->
+    <resultMap id="memberMap" type="MemberDTO">
+        <id property="usersIdx" column="users_idx"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="password" column="password"/>
+        <result property="address" column="address"/>
+        <result property="birthdate" column="birthdate"/>
+        <collection property="authList" resultMap="authMap"/>
+    </resultMap>
+
+    <select id="get" resultMap="memberMap">
+        SELECT
+            u.users_idx,
+            u.user_id,
+            u.user_name,
+            u.password,
+            u.birthdate,
+            u.address,
+            a.auth
+        FROM users u
+                 LEFT OUTER JOIN users_auth a
+                                 ON u.users_idx = a.user_idx
+        WHERE u.user_id = #{user_id};
+
+    </select>
+
+
+
+
+
+
+
+</mapper>
