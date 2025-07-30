@@ -1,38 +1,27 @@
-# workflow의 이동
-name: Github Actions 실행시켜보기
+name: Deploy To EC2
 
-# Event: 실행되는 시점을 설정
-# Main이라는 브랜치에 push가 될 때 workflow를 실행
 on:
   push:
     branches:
       - main
 
-# 하나의 workflow는 1개 이상의 Job으로 구성됨
-# 여러 Job은 기본적으로 병렬적으로 수행됨
 jobs:
-  # job을 식별하기 위한 id
-  My-Deploy-Job:
-    # ubuntu 환경 / 가장 최신 버전(latest) 선택
+  Deploy:
     runs-on: ubuntu-latest
-
-    # Step: 특정 작업을 수행하는 가장 작은 단위
-    # Job은 여러 Step들로 구성되어 있다
     steps:
-      - name: Hello World 찍기
-        run: echo "Hello World"
-
-      - name: 여러 명령어 문장 작성하기
-        run: |
-          echo "Good"
-          echo "Morning"
-
-      - name: Github Actions 자체에 저장되어 있는 변수 사용해보기
-        run: |
-          echo $GITHUB_SHA
-          echo $GITHUB_REPOSITORY
-
-      - name: 아무한테 노출이 되면 안 되는 값
-        run: |
-          echo ${{ secrets.MY_NAME }}
-          echo ${{ secrets.MY_HOBBY }}
+      - name: SSH(원격 접속)로 EC2에 접속하기
+        # 사용하는 라이브러리
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.USERNAME}}
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script_stop: true
+          script: |
+            cd /home/ubuntu/github-actions-practice
+            git pull origin main
+            ./gradlew clean build -x test
+            sudo fuser -k -n tcp 8080 || true
+            cp build/libs/*SNAPSHOT.war /opt/tomcat9/webapps/ROOT.war
+            nohup /opt/tomcat9/bin/startup.sh > ./tomcat.log 2>&1 &
+            
