@@ -51,7 +51,7 @@ jobs:
           envs: APPLICATION_PROPERTIES,EMAIL_PROPERTIES
           script_stop: true
           script: |
-            cd /home/ubuntu/KB_BE_Real
+            cd /home/ubuntu/github-actions-practice
 
             # 1. 설정파일 교체
             rm -f src/main/resources/application.properties
