@@ -34,7 +34,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableWebSecurity
 @Log4j2
 @MapperScan(basePackages = {"org.scoula.security.account.mapper"})
-@ComponentScan(basePackages = {"org.scoula.security"})
+@ComponentScan(basePackages = {"org.scoula"})
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
