@@ -24,7 +24,7 @@ jobs:
             chmod +x gradlew
             ./gradlew clean build -x test --build-cache
             sudo fuser -k -n tcp 8080 || true
-            cp build/libs/*SNAPSHOT.war /opt/tomcat9/webapps/ROOT.war
+            cp build/libs/KB_BE-1.0-SNAPSHOT.war /opt/tomcat9/webapps/ROOT.war
             /opt/tomcat9/bin/shutdown.sh || true
             nohup /opt/tomcat9/bin/startup.sh > ./tomcat.log 2>&1 &
 
