@@ -91,6 +91,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()//경로별접근권한설정
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
+                .antMatchers("/").permitAll()
                 .antMatchers("/v1/account/**").permitAll()
                 .antMatchers("/v1/email/**").permitAll()
                 .antMatchers("/v1/auth/**").permitAll()
